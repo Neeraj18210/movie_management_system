@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const db = require('./config/db');
+const initializeDatabase = require('./config/initDb');
 
 // Route imports
 const userRoutes = require('./routes/userRoutes');
@@ -85,11 +86,14 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start Express Server
-app.listen(PORT, () => {
+// Start Express Server & Auto-initialize database tables if empty
+app.listen(PORT, async () => {
     console.log(`=======================================================`);
     console.log(`🎬 Neeraj Movie Theatre - Ticket Management System Server is Running!`);
     console.log(`📡 URL: http://localhost:${PORT}`);
     console.log(`🗄️  Database: MySQL (${process.env.DB_NAME || 'movie_ticket_management'})`);
     console.log(`=======================================================`);
+    
+    // Auto-seed database if empty
+    await initializeDatabase();
 });
