@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Neeraj Movie Theatre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="ticket-wrapper">
+                <!-- Section Header -->
+                <div class="section-header" style="margin-bottom: 2rem; justify-content: center; text-align: center;">
+                    <div>
+                        <h1 class="section-title" id="pageTitle"><i class="fas fa-ticket-alt"></i> Confirm Your Reservation</h1>
+                        <p class="section-subtitle">Review order details and confirm booking with MySQL transaction</p>
+                    </div>
+                </div>
+
+                <!-- Ticket Card Container -->
+                <div id="ticketContainer">
+                    <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p style="margin-top: 0.5rem;">Preparing ticket details...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/confirmation.js"></script>
+</body>
+</html>

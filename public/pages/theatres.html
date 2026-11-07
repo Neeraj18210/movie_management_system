@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoriums & Screens - Neeraj Movie Theatre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header" style="margin-bottom: 2rem;">
+                <div>
+                    <h1 class="section-title"><i class="fas fa-city"></i> Cinema Theatres & Venues</h1>
+                    <p class="section-subtitle">Experience movies in world-class audio-visual environments</p>
+                </div>
+            </div>
+
+            <!-- Search Theatres -->
+            <div class="search-filter-card">
+                <div class="search-input-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="theatreSearchInput" placeholder="Search by theatre name or city location...">
+                </div>
+            </div>
+
+            <!-- Theatres Grid -->
+            <div class="theatre-grid" id="theatresGrid">
+                <div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top: 0.5rem;">Loading theatres from MySQL...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/theatres.js"></script>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Neeraj Movie Theatre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Admin Header -->
+            <div class="admin-header">
+                <div>
+                    <h1 class="section-title"><i class="fas fa-shield-alt" style="color: var(--accent-gold);"></i> Cinema Administration Portal</h1>
+                    <p class="section-subtitle">Real-time control center backed by MySQL Workbench database</p>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button class="btn btn-primary btn-sm" onclick="openMovieModal()">
+                        <i class="fas fa-plus"></i> Add Movie
+                    </button>
+                    <button class="btn btn-gold btn-sm" onclick="openShowModal()">
+                        <i class="fas fa-calendar-plus"></i> Schedule Show
+                    </button>
+                    <button class="btn btn-outline btn-sm" onclick="openTheatreModal()">
+                        <i class="fas fa-building"></i> Add Theatre
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Metric Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon gold"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Total Revenue</span>
+                        <div class="kpi-value" id="kpiRevenue" style="color: var(--accent-gold);">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon red"><i class="fas fa-film"></i></div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Total Movies</span>
+                        <div class="kpi-value" id="kpiMovies">0</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon blue"><i class="fas fa-city"></i></div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Total Theatres</span>
+                        <div class="kpi-value" id="kpiTheatres">0</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon green"><i class="fas fa-clock"></i></div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Active Shows</span>
+                        <div class="kpi-value" id="kpiShows">0</div>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icon gold"><i class="fas fa-ticket-alt"></i></div>
+                    <div class="kpi-details">
+                        <span class="kpi-label">Total Bookings</span>
+                        <div class="kpi-value" id="kpiBookings">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Navigation Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" data-tab="tab-overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </button>
+                <button class="admin-tab-btn" data-tab="tab-movies">
+                    <i class="fas fa-film"></i> Movies (<span id="tabCountMovies">0</span>)
+                </button>
+                <button class="admin-tab-btn" data-tab="tab-theatres">
+                    <i class="fas fa-city"></i> Theatres (<span id="tabCountTheatres">0</span>)
+                </button>
+                <button class="admin-tab-btn" data-tab="tab-shows">
+                    <i class="fas fa-clock"></i> Scheduled Shows (<span id="tabCountShows">0</span>)
+                </button>
+                <button class="admin-tab-btn" data-tab="tab-bookings">
+                    <i class="fas fa-ticket-alt"></i> Customer Bookings (<span id="tabCountBookings">0</span>)
+                </button>
+                <button class="admin-tab-btn" data-tab="tab-customers">
+                    <i class="fas fa-users"></i> Registered Customers (<span id="tabCountCustomers">0</span>)
+                </button>
+            </div>
+
+            <!-- TAB 1: OVERVIEW -->
+            <div class="admin-tab-content active" id="tab-overview">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.75rem;">
+                    <!-- Recent Bookings Table -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 1rem;"><i class="fas fa-history" style="color: var(--accent-gold);"></i> Recent Ticket Reservations</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="recentBookingsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Ref</th>
+                                        <th>Customer</th>
+                                        <th>Movie</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted);">Loading recent transactions...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Top Performing Movies -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1.5rem;">
+                        <h3 style="font-size: 1.15rem; margin-bottom: 1rem;"><i class="fas fa-trophy" style="color: var(--accent-gold);"></i> Top Performing Movies</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="popularMoviesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Movie</th>
+                                        <th>Genre</th>
+                                        <th>Tickets Sold</th>
+                                        <th>Total Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Calculating box-office results...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MOVIES MANAGEMENT -->
+            <div class="admin-tab-content" id="tab-movies">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div class="search-input-box" style="max-width: 350px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="adminMovieSearch" placeholder="Search movies...">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="openMovieModal()">
+                        <i class="fas fa-plus"></i> Add New Movie
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="adminMoviesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Poster</th>
+                                <th>Title</th>
+                                <th>Genre</th>
+                                <th>Language</th>
+                                <th>Duration</th>
+                                <th>Release Date</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 3: THEATRES MANAGEMENT -->
+            <div class="admin-tab-content" id="tab-theatres">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div class="search-input-box" style="max-width: 350px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="adminTheatreSearch" placeholder="Search theatres...">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="openTheatreModal()">
+                        <i class="fas fa-plus"></i> Add New Theatre
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="adminTheatresTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Theatre Name</th>
+                                <th>Location</th>
+                                <th>Total Seats</th>
+                                <th>Active Shows</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: SHOWS MANAGEMENT -->
+            <div class="admin-tab-content" id="tab-shows">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div class="search-input-box" style="max-width: 350px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="adminShowSearch" placeholder="Search shows...">
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="openShowModal()">
+                        <i class="fas fa-calendar-plus"></i> Schedule New Show
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="adminShowsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Movie</th>
+                                <th>Theatre</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Ticket Price</th>
+                                <th>Available Seats</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 5: BOOKINGS MANAGEMENT -->
+            <div class="admin-tab-content" id="tab-bookings">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <div class="search-input-box" style="max-width: 350px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="adminBookingSearch" placeholder="Search by ref, customer, or movie...">
+                    </div>
+                    <select id="adminBookingStatusFilter" class="form-control" style="width: auto; background: var(--bg-secondary);">
+                        <option value="all">All Statuses</option>
+                        <option value="CONFIRMED">CONFIRMED</option>
+                        <option value="CANCELLED">CANCELLED</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table" id="adminBookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Reference</th>
+                                <th>Customer</th>
+                                <th>Movie</th>
+                                <th>Theatre</th>
+                                <th>Date & Time</th>
+                                <th>Seats</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 6: REGISTERED CUSTOMERS -->
+            <div class="admin-tab-content" id="tab-customers">
+                <div class="table-responsive">
+                    <table class="data-table" id="adminCustomersTable">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Customer Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Registered Date</th>
+                                <th>Total Bookings</th>
+                                <th>Total Spent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by admin.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ============================================================
+         ADMIN MODALS (ADD/EDIT MOVIE, THEATRE, SHOW)
+         ============================================================ -->
+
+    <!-- Movie Modal -->
+    <div class="modal-backdrop" id="movieModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="movieModalTitle">Add New Movie</h3>
+                <button type="button" class="btn btn-outline btn-sm" onclick="closeMovieModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="movieForm">
+                <div class="modal-body">
+                    <input type="hidden" id="movieFormId">
+                    <div class="form-group">
+                        <label class="form-label">Movie Title *</label>
+                        <input type="text" id="movieFormTitle" class="form-control" required placeholder="e.g. Avatar: The Way of Water">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Genre *</label>
+                            <input type="text" id="movieFormGenre" class="form-control" required placeholder="e.g. Sci-Fi">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Language *</label>
+                            <input type="text" id="movieFormLanguage" class="form-control" required placeholder="e.g. English">
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Duration (minutes) *</label>
+                            <input type="number" id="movieFormDuration" class="form-control" required min="30" max="360" placeholder="150">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Release Date *</label>
+                            <input type="date" id="movieFormReleaseDate" class="form-control" required>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Rating (e.g. 8.5)</label>
+                            <input type="number" id="movieFormRating" class="form-control" step="0.1" min="1" max="10" placeholder="8.5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select id="movieFormStatus" class="form-control" style="background: var(--bg-secondary);">
+                                <option value="now_showing">Now Showing</option>
+                                <option value="upcoming">Upcoming</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Poster Image URL</label>
+                        <input type="url" id="movieFormPoster" class="form-control" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Backdrop Banner URL</label>
+                        <input type="url" id="movieFormBanner" class="form-control" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description / Synopsis</label>
+                        <textarea id="movieFormDesc" class="form-control" rows="3" placeholder="Enter movie synopsis..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeMovieModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveMovieBtn">Save Movie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Theatre Modal -->
+    <div class="modal-backdrop" id="theatreModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="theatreModalTitle">Add New Theatre</h3>
+                <button type="button" class="btn btn-outline btn-sm" onclick="closeTheatreModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="theatreForm">
+                <div class="modal-body">
+                    <input type="hidden" id="theatreFormId">
+                    <div class="form-group">
+                        <label class="form-label">Theatre Name *</label>
+                        <input type="text" id="theatreFormName" class="form-control" required placeholder="e.g. CineMax Royale IMAX">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location / Address *</label>
+                        <input type="text" id="theatreFormLocation" class="form-control" required placeholder="e.g. 5th Ave Mall, New York">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Total Seating Capacity *</label>
+                        <input type="number" id="theatreFormSeats" class="form-control" required min="20" max="500" value="60">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeTheatreModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTheatreBtn">Save Theatre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Show Modal -->
+    <div class="modal-backdrop" id="showModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="showModalTitle">Schedule New Show</h3>
+                <button type="button" class="btn btn-outline btn-sm" onclick="closeShowModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="showForm">
+                <div class="modal-body">
+                    <input type="hidden" id="showFormId">
+                    <div class="form-group">
+                        <label class="form-label">Select Movie *</label>
+                        <select id="showFormMovie" class="form-control" required style="background: var(--bg-secondary);">
+                            <option value="">Select a movie...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Theatre *</label>
+                        <select id="showFormTheatre" class="form-control" required style="background: var(--bg-secondary);">
+                            <option value="">Select a theatre...</option>
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label">Show Date *</label>
+                            <input type="date" id="showFormDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Show Time *</label>
+                            <input type="time" id="showFormTime" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ticket Price ($) *</label>
+                        <input type="number" id="showFormPrice" class="form-control" required step="0.50" min="5" max="100" placeholder="15.00">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeShowModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveShowBtn">Save Show Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

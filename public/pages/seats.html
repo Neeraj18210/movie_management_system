@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats - Neeraj Movie Theatre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Show Header Info -->
+            <div id="seatShowHeader" style="margin-bottom: 2rem;">
+                <div style="text-align: center; color: var(--text-muted); padding: 1.5rem;">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top: 0.5rem;">Loading auditorium layout from MySQL...</p>
+                </div>
+            </div>
+
+            <!-- Cinema Hall Seating Layout -->
+            <div class="cinema-hall-container">
+                <!-- Curved Screen -->
+                <div class="screen-wrapper">
+                    <div class="screen-arc"></div>
+                    <span class="screen-label"><i class="fas fa-film"></i> EYES THIS WAY &bull; CINEMA SCREEN <i class="fas fa-film"></i></span>
+                </div>
+
+                <!-- Seat Status Legend -->
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="legend-box available"></div>
+                        <span>Available</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box selected"></div>
+                        <span>Selected</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box booked"></div>
+                        <span>Already Booked (Reserved)</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Seat Rows & Grid -->
+                <div class="seating-grid" id="auditoriumGrid">
+                    <!-- Populated dynamically by seats.js -->
+                </div>
+            </div>
+
+            <!-- Dynamic Bottom Summary Bar -->
+            <div class="seat-summary-bar">
+                <div class="summary-details">
+                    <div class="summary-metric">
+                        <span class="label">Selected Seats</span>
+                        <span class="value" id="selectedSeatsLabel">None</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="label">Seat Count</span>
+                        <span class="value" id="seatCountLabel">0</span>
+                    </div>
+                    <div class="summary-metric">
+                        <span class="label">Total Amount</span>
+                        <span class="value gold" id="totalAmountLabel">$0.00</span>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="proceedConfirmBtn" class="btn btn-primary btn-lg" disabled>
+                        Proceed to Confirmation <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/seats.js"></script>
+</body>
+</html>

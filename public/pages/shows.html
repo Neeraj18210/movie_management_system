@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Timings & Schedules - Neeraj Movie Theatre</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="navbar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="section-header" style="margin-bottom: 2rem;">
+                <div>
+                    <h1 class="section-title"><i class="fas fa-clock"></i> Scheduled Showtimes</h1>
+                    <p class="section-subtitle">Real-time cinema schedules with live seat availability from MySQL</p>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="search-filter-card">
+                <div class="filter-selects" style="width: 100%; display: flex; flex-wrap: wrap; gap: 1rem;">
+                    <div style="flex: 1 1 200px;">
+                        <label class="form-label">Filter by Movie</label>
+                        <select id="showMovieFilter" class="form-control" style="background: var(--bg-secondary);">
+                            <option value="">All Movies</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1 1 200px;">
+                        <label class="form-label">Filter by Theatre</label>
+                        <select id="showTheatreFilter" class="form-control" style="background: var(--bg-secondary);">
+                            <option value="">All Theatres</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1 1 150px;">
+                        <label class="form-label">Filter by Date</label>
+                        <input type="date" id="showDateFilter" class="form-control" style="background: var(--bg-secondary);">
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-outline" id="resetShowsFilterBtn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shows List -->
+            <div id="showsListContainer">
+                <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
+                    <p style="margin-top: 0.5rem;">Fetching available shows from MySQL...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/navbar.js"></script>
+    <script src="/js/shows.js"></script>
+</body>
+</html>
